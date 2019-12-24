@@ -1,0 +1,12 @@
+env
+.env.exampe
+*.rbc
+log
+passenger.*.log
+.pid
+.pid.lock
+tmp
+**.orig
+.bundle
+.ruby-version
+.ruby-gemset

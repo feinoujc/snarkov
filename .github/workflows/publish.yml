@@ -1,0 +1,30 @@
+name: publish
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+      
+      - name: Build image
+        run: docker build . --file Dockerfile --tag image
+
+      - uses: rlespinasse/github-slug-action@1.1.0
+      - name: Push image
+        env:
+          OWNER: feinoujc
+          IMAGE_NAME: snarkov
+        run: |
+          IMAGE_ID=$OWNER/$IMAGE_NAME
+          VERSION=$GITHUB_REF_SLUG-$GITHUB_SHA_SHORT
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+          docker tag image $IMAGE_ID:latest
+          docker push $IMAGE_ID:latest
