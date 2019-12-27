@@ -1,4 +1,4 @@
-FROM phusion/passenger-ruby25
+FROM phusion/passenger-ruby25:1.0.9
 
 RUN gem install bundler -v 1.17.3
 
@@ -15,8 +15,10 @@ COPY Gemfile* ./
 # Install gems to /bundle
 RUN bundle install
 
-ADD . .
+COPY . .
 
 RUN chown -R app:app ${APP_BASE_DIR}
 
 EXPOSE 3000
+
+CMD ["passenger", "start"]

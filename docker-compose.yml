@@ -6,8 +6,9 @@ services:
     environment:
       OUTGOING_WEBHOOK_TOKEN: 123
       RESPONSE_CHANCE: 0.5
-      RACK_ENV: development
+      RACK_ENV: production
       LOCAL_REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://redis:6379
       MAX_WORDS: 100
       API_TOKEN: abc123
       REPLY_REGEX: (sn|m)arkov
@@ -16,13 +17,9 @@ services:
     volumes:
       - .:/home/app
     build: .
-    command:
-      - passenger
-      - start
     depends_on:
       - redis
       - memcached
-
 
   redis:
     image: redis:5-alpine
